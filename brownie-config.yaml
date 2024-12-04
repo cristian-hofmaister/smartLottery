@@ -1,0 +1,26 @@
+dotenv: .env
+wallets:
+  from_key: ${PRIVATE_KEY}
+dependencies:
+  - smartcontractkit/chainlink-brownie-contracts@1.1.1
+  - OpenZeppelin/openzeppelin-contracts@3.4.0
+compiler:
+  solc:
+    remappings:
+      - '@chainlink=smartcontractkit/chainlink-brownie-contracts@1.1.1'
+      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@3.4.0'
+networks:
+  default: development
+  mainnet-fork:
+    eth_usd_price_feed: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419'
+  infura:
+    host: https://mainnet.infura.io/v3/b62805fce9314264b7652e5ef3a3fd7c
+  infura-mainnet:
+    vrf_coordinator: '0xf0d54349aDdcf704F77AE15b96510dEA15cb7952'
+    eth_usd_price_feed: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419'
+    link_token: '0x514910771AF9Ca656af840dff83E8264EcF986CA'
+    keyhash: '0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445'
+    fee: 100000000000000000
+  development: 
+    keyhash: '0xAA77729D3466CA35AE8D28B3BBAC7CC36A5031EFDC430821C02BC31A238AF445'
+    fee: 100000000000000000
