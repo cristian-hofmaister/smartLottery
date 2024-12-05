@@ -1,5 +1,5 @@
 # 0.013
-from scripts.deploy_lottery import deploy_lottery, get_account, fund_with_link
+from scripts.deploy_lottery import deploy_lottery, get_account, fund_with_link, get_contract
 from web3 import Web3
 from scripts.helpfull_scripts import LOCAL_BLOCKCHAIN_ENVIRONMENTS
 
@@ -53,7 +53,7 @@ def test_can_end_lottery():
     assert lottery.lottery_state() == 2
 
     
-    def test_can_pick_winner_correctly():
+def test_can_pick_winner_correctly():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         pytest.skip()
      #arrange
@@ -65,7 +65,18 @@ def test_can_end_lottery():
     lottery.enter({"from":get_account(index=2), "value": lottery.getEntranceFee()})
 
     fund_with_link(lottery)
-    lottery.endLottery({"from":account})
+    transaction = lottery.endLottery({"from":account})
+    request_id = transaction.events["requestedRandomness"]["requestId"]
+    STATIC_RNG = 777
+    get_contract("vrf_coordinator").callBackWithRandomness(request_id, STATIC_RNG, lottery.address, {"from": account } )
+    
+    starting_ballance_of_account = account.balance()
+    balance_of_lottery = lottery.balance()
+    # 777 % 3 , deberia resolver a que gano 0
+    assert lottery.recentWinner() == account
+    assert lottery.balance() == 0
+    assert account.balance ()== starting_ballance_of_account + balance_of_lottery
+
    
     
     

@@ -40,7 +40,7 @@ def get_contract(contract_name):
         contract_address = config["networks"][network.show_active()][contract_name]
         # address
         # ABI
-        contract = Contract.from_abi(contract_type._name, contract_type.abi)
+        contract = Contract.from_abi(contract_type._name, contract_address, contract_type.abi)
     return contract
 
 DECIMALS=8
@@ -60,3 +60,4 @@ def fund_with_link(contract_address, account=None, link_token=None, ammount=1000
     tx = link_token.transfer(contract_address, ammount, {"from": account})
     tx.wait(1)
     print("contrato con fondos")
+    return tx

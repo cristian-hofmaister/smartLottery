@@ -11,7 +11,9 @@ def deploy_lottery():
                               get_contract("link_token").address, 
                               config["networks"][network.show_active()]["fee"], 
                               config["networks"][network.show_active()]["keyhash"] 
-                              ,{"from":account} )
+                              ,{"from":account} ,
+                               publish_source=config["networks"][network.show_active()].get("verify", False),
+                            )
 
     print("Deployed")
     return lottery
@@ -38,7 +40,7 @@ def end_lottery():
     # fund the contract
     tx = fund_with_link (lottery.address)
    # tx.wait(1)
-    etx = lottery.endLottery({"from":account})
+    etx = lottery.endLottery({"from":account, 'gas': 300000 , "allow_revert": True})
     etx.wait(1)
     time.sleep(60)
     print(f"{lottery.recentWinner()} Es el ganador")
